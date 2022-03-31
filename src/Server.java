@@ -33,6 +33,7 @@ public class Server {
                     run = false;
                 }
                 // System.out.println(msgs);
+                // varför fungerar programmet bara när linjen ovan finns där
                 if(!msgs.isEmpty()){
                     msgs.forEach(msg ->{
                         System.out.println(msg);
