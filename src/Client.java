@@ -6,15 +6,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-/**
- *
- * @author magnus
- */
 public class Client {
 
     public static void main(String[] args) {
-        String ip = (String) JOptionPane.showInputDialog(null,"IP?","Connect to..",JOptionPane.QUESTION_MESSAGE);
-        int port = Integer.parseInt(JOptionPane.showInputDialog(null,"Port?","Connect to..",JOptionPane.QUESTION_MESSAGE));       ;
+        String ip = "localhost"; //JOptionPane.showInputDialog(null,"IP?","Connect to..",JOptionPane.QUESTION_MESSAGE);
+        int port = 8000; //Integer.parseInt(JOptionPane.showInputDialog(null,"Port?","Connect to..",JOptionPane.QUESTION_MESSAGE));
         Socket socket = null;
         
         try {
@@ -28,19 +24,14 @@ public class Client {
         try {
             Scanner tgb = new Scanner(System.in);
             PrintWriter out = new PrintWriter(socket.getOutputStream(),true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            //ListenerThread in = new ListenerThread(new BufferedReader(new InputStreamReader(socket.getInputStream()
-            // )));
-            //Thread listener = new Thread(in);
-            //listener.start();
+            ListenerThread in = new ListenerThread(br);
+            Thread listener = new Thread(in);
+            listener.start();
             boolean run = true;
             while (run) {
-                String msg = in.readLine();
-                System.out.println(msg);
-                msg = in.readLine();
-                System.out.println(msg);
-                msg = tgb.nextLine();
+                String msg = tgb.nextLine();
                 if (msg.equals("quit")) {
                     run = false;
                     out.println(msg);

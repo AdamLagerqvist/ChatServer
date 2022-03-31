@@ -1,12 +1,21 @@
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
 
-public class ListenerThread implements Runnable{
+public class ServerThread implements Runnable{
     private BufferedReader in;
+    private Server server;
 
-    public ListenerThread(BufferedReader in) {
-        this.in = in;
+    public ServerThread(Socket socket, Server server) {
+        try {
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.server = server;
     }
 
     @Override
@@ -18,8 +27,7 @@ public class ListenerThread implements Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (msg != null)
-            System.out.println(msg);
+            server.msgs.add(msg);
         }
     }
 
